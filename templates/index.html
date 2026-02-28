@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LINCODE :: Ubuntu CLI Expert</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="scanlines"></div>
+    <div class="crt-vignette"></div>
+
+    <header>
+        <pre class="logo">  ██╗     ██╗███╗   ██╗ ██████╗ ██████╗ ██████╗ ███████╗
+  ██║     ██║████╗  ██║██╔════╝██╔═══██╗██╔══██╗██╔════╝
+  ██║     ██║██╔██╗ ██║██║     ██║   ██║██║  ██║█████╗
+  ██║     ██║██║╚██╗██║██║     ██║   ██║██║  ██║██╔══╝
+  ███████╗██║██║ ╚████║╚██████╗╚██████╔╝██████╔╝███████╗
+  ╚══════╝╚═╝╚═╝  ╚═══╝ ╚═════╝ ╚═════╝ ╚═════╝╚══════╝</pre>
+        <div class="status-bar">
+            <span id="conn-status">● READY</span>
+            <span>claude-sonnet-4-6 :: UBUNTU CLI EXPERT</span>
+        </div>
+    </header>
+
+    <main id="message-log"></main>
+
+    <footer>
+        <div class="input-row">
+            <span class="prompt">$&gt;</span>
+            <textarea
+                id="user-input"
+                placeholder="describe a task or paste a command..."
+                disabled
+                rows="1"
+            ></textarea>
+            <button id="send-btn" disabled>[EXEC]</button>
+        </div>
+        <div class="controls">
+            <button id="clear-btn">[CLR]</button>
+            <span class="hint">Enter → send &nbsp;|&nbsp; Shift+Enter → newline &nbsp;|&nbsp; Esc → clear</span>
+        </div>
+    </footer>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>

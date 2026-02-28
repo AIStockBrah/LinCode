@@ -1,0 +1,404 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --bg: #0a0a0a;
+    --phosphor: #00ff41;
+    --phosphor-dim: #00b32d;
+    --phosphor-bright: #39ff14;
+    --glow: rgba(0, 255, 65, 0.35);
+    --glow-strong: rgba(0, 255, 65, 0.6);
+    --font: 'Courier New', 'Lucida Console', monospace;
+}
+
+/* ==========================================================================
+   Animations
+   ========================================================================== */
+
+@keyframes flicker {
+    0%   { opacity: 1; }
+    8%   { opacity: 0.94; }
+    12%  { opacity: 1; }
+    28%  { opacity: 0.97; }
+    48%  { opacity: 0.99; }
+    68%  { opacity: 0.93; }
+    78%  { opacity: 1; }
+    92%  { opacity: 0.96; }
+    100% { opacity: 1; }
+}
+
+@keyframes glow-pulse {
+    0%, 100% {
+        text-shadow: 0 0 6px var(--phosphor), 0 0 12px var(--glow);
+    }
+    50% {
+        text-shadow: 0 0 10px var(--phosphor), 0 0 22px var(--glow-strong), 0 0 40px var(--glow);
+    }
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+}
+
+@keyframes typewriter-cursor {
+    0%, 100% { border-right-color: var(--phosphor); }
+    50%       { border-right-color: transparent; }
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+html, body {
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    background: var(--bg);
+    color: var(--phosphor);
+    font-family: var(--font);
+    font-size: 14px;
+    line-height: 1.5;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+    animation: flicker 0.35s 0.5s 1;
+}
+
+/* ==========================================================================
+   CRT Effects
+   ========================================================================== */
+
+.scanlines {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9999;
+    background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(0, 0, 0, 0.12) 2px,
+        rgba(0, 0, 0, 0.12) 4px
+    );
+}
+
+.crt-vignette {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 9998;
+    background: radial-gradient(
+        ellipse at center,
+        transparent 55%,
+        rgba(0, 0, 0, 0.6) 100%
+    );
+}
+
+/* ==========================================================================
+   Header
+   ========================================================================== */
+
+header {
+    padding: 14px 20px 8px;
+    border-bottom: 1px solid var(--phosphor-dim);
+    flex-shrink: 0;
+}
+
+.logo {
+    font-size: 11px;
+    line-height: 1.2;
+    color: var(--phosphor-bright);
+    white-space: pre;
+    overflow-x: auto;
+    animation: glow-pulse 4s ease-in-out infinite;
+    user-select: none;
+}
+
+.status-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 6px;
+    padding: 3px 0;
+    font-size: 11px;
+    color: var(--phosphor-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+}
+
+#conn-status {
+    color: var(--phosphor-bright);
+    text-shadow: 0 0 6px var(--phosphor);
+    letter-spacing: 0.08em;
+}
+
+/* ==========================================================================
+   Message Log
+   ========================================================================== */
+
+#message-log {
+    flex: 1;
+    overflow-y: auto;
+    padding: 14px 20px 10px;
+    scroll-behavior: smooth;
+}
+
+#message-log::-webkit-scrollbar {
+    width: 4px;
+}
+
+#message-log::-webkit-scrollbar-track {
+    background: #0d0d0d;
+}
+
+#message-log::-webkit-scrollbar-thumb {
+    background: var(--phosphor-dim);
+    opacity: 0.5;
+}
+
+/* Boot sequence lines */
+.boot-line {
+    color: var(--phosphor-dim);
+    font-size: 12px;
+    margin-bottom: 3px;
+    letter-spacing: 0.06em;
+    text-shadow: 0 0 4px var(--phosphor-dim);
+}
+
+/* ==========================================================================
+   Messages
+   ========================================================================== */
+
+.msg-user {
+    text-align: right;
+    margin: 12px 0 12px 15%;
+    color: var(--phosphor-bright);
+    text-shadow: 0 0 5px var(--phosphor), 0 0 10px var(--glow);
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding-right: 10px;
+    border-right: 2px solid var(--phosphor-dim);
+    font-size: 13px;
+}
+
+.msg-user .prefix {
+    color: var(--phosphor-dim);
+    text-shadow: none;
+}
+
+.msg-assistant {
+    text-align: left;
+    margin: 12px 0;
+    color: var(--phosphor);
+    line-height: 1.65;
+    font-size: 13px;
+}
+
+.msg-assistant .prefix {
+    color: var(--phosphor-dim);
+    user-select: none;
+}
+
+/* Inline code */
+.msg-assistant code {
+    font-family: var(--font);
+    color: var(--phosphor-bright);
+    background: rgba(0, 255, 65, 0.08);
+    padding: 1px 5px;
+    font-size: 12px;
+    border: 1px solid rgba(0, 255, 65, 0.15);
+}
+
+/* Fenced code blocks */
+.msg-assistant pre.code-block {
+    position: relative;
+    margin: 10px 0;
+    padding: 10px 70px 10px 14px;
+    background: rgba(0, 255, 65, 0.04);
+    border-left: 3px solid var(--phosphor);
+    overflow-x: auto;
+}
+
+.msg-assistant pre.code-block code {
+    font-family: var(--font);
+    font-size: 12px;
+    color: var(--phosphor-bright);
+    background: transparent;
+    border: none;
+    padding: 0;
+    display: block;
+    white-space: pre;
+    text-shadow: 0 0 3px var(--glow);
+}
+
+.copy-btn {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    background: transparent;
+    border: 1px solid var(--phosphor-dim);
+    color: var(--phosphor-dim);
+    font-family: var(--font);
+    font-size: 10px;
+    padding: 2px 7px;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    transition: all 0.15s;
+    white-space: nowrap;
+}
+
+.copy-btn:hover {
+    background: rgba(0, 255, 65, 0.1);
+    color: var(--phosphor-bright);
+    border-color: var(--phosphor);
+    text-shadow: 0 0 5px var(--phosphor);
+}
+
+/* Bold */
+.msg-assistant strong {
+    color: var(--phosphor-bright);
+    font-weight: bold;
+    text-shadow: 0 0 4px var(--glow);
+}
+
+/* Lists */
+.msg-assistant ul {
+    list-style: none;
+    margin: 6px 0;
+    padding-left: 0;
+}
+
+.msg-assistant li {
+    padding-left: 18px;
+    position: relative;
+    margin-bottom: 3px;
+}
+
+.msg-assistant li::before {
+    content: '-';
+    color: var(--phosphor-dim);
+    position: absolute;
+    left: 6px;
+}
+
+/* Error */
+.error-text {
+    color: #ff4444;
+    text-shadow: 0 0 6px rgba(255, 68, 68, 0.5);
+}
+
+/* ==========================================================================
+   Footer / Input
+   ========================================================================== */
+
+footer {
+    border-top: 1px solid var(--phosphor-dim);
+    padding: 10px 20px 12px;
+    flex-shrink: 0;
+    background: var(--bg);
+}
+
+.input-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.prompt {
+    color: var(--phosphor-bright);
+    text-shadow: 0 0 6px var(--phosphor);
+    padding-top: 5px;
+    flex-shrink: 0;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    user-select: none;
+}
+
+#user-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--phosphor-dim);
+    color: var(--phosphor);
+    font-family: var(--font);
+    font-size: 14px;
+    padding: 4px 0;
+    resize: none;
+    outline: none;
+    line-height: 1.5;
+    max-height: 200px;
+    overflow-y: auto;
+    text-shadow: 0 0 4px var(--glow);
+    transition: border-color 0.15s;
+    caret-color: var(--phosphor-bright);
+}
+
+#user-input:focus {
+    border-bottom-color: var(--phosphor);
+}
+
+#user-input:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+}
+
+#user-input::placeholder {
+    color: var(--phosphor-dim);
+    opacity: 0.55;
+}
+
+/* Buttons */
+#send-btn,
+#clear-btn {
+    background: transparent;
+    border: 1px solid var(--phosphor-dim);
+    color: var(--phosphor-dim);
+    font-family: var(--font);
+    font-size: 12px;
+    padding: 5px 12px;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+#send-btn:hover:not(:disabled),
+#clear-btn:hover {
+    background: rgba(0, 255, 65, 0.08);
+    color: var(--phosphor-bright);
+    border-color: var(--phosphor);
+    text-shadow: 0 0 6px var(--phosphor);
+}
+
+#send-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 7px;
+}
+
+.hint {
+    font-size: 11px;
+    color: var(--phosphor-dim);
+    opacity: 0.6;
+    letter-spacing: 0.03em;
+}
